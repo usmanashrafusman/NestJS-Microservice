@@ -9,9 +9,6 @@ export class Session extends AbstractEntity<Session>{
     token: string
 
     @Column("text")
-    key: string
-
-    @Column("uuid")
-    userId: string
+    secret: string
 
 }

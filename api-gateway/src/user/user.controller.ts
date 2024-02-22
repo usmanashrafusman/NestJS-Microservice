@@ -1,13 +1,14 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { EVENTS, UserClientService } from 'src/microservices/user/user-client.service';
 import { CreateUserDto } from './dto/create-user-dto';
+import { UserService } from './user.service';
+import { IResponse } from 'src/common/config';
 
-@Controller("user")
+@Controller('user')
 export class UserController {
-  constructor(private userService: UserClientService) { }
+  constructor(private userService: UserService) {}
 
   @Post()
-  async getUser(@Body() user: CreateUserDto) {
-    return await this.userService.sendMessage(EVENTS.CREATE_USER, user);
+  async createUser(@Body() user: CreateUserDto): Promise<IResponse<any>> {
+    return this.userService.create(user);
   }
 }

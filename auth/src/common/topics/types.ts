@@ -1,0 +1,3 @@
+export enum TOPICS {
+    CREATE_AUTH_TOKEN = "CREATE_AUTH_TOKEN"
+}

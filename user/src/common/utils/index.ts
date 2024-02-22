@@ -1,7 +1,7 @@
 export class CreatePayload<T> {
-    constructor(private payload: T) { }
+  constructor(private payload: T) {}
 
-    toString() {
-        return JSON.stringify(this.payload || {})
-    }
+  toString() {
+    return JSON.stringify(this.payload || {});
+  }
 }

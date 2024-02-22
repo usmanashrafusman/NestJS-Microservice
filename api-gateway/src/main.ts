@@ -1,8 +1,9 @@
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
+
 import { AppModule } from 'src/app.module';
-import { ValidationPipe } from '@nestjs/common';
 
 (async () => {
   const app = await NestFactory.create(AppModule);
@@ -10,14 +11,15 @@ import { ValidationPipe } from '@nestjs/common';
 
   app.enableCors();
   app.use(cookieParser());
-  app.setGlobalPrefix("api/v1");
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,
-    transform: true,
-    forbidNonWhitelisted: true,
-  }));
-
-  await app.listen(configService.getOrThrow("PORT"));
-})()
-
-
+  app.setGlobalPrefix('api/v1');
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      forbidNonWhitelisted: true,
+      stopAtFirstError: true,
+    }),
+  );
+  await app.startAllMicroservices();
+  await app.listen(configService.getOrThrow('PORT'));
+})();

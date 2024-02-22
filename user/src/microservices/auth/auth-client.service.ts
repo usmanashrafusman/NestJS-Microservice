@@ -1,44 +1,32 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ClientKafka } from '@nestjs/microservices';
-import { CreatePayload } from 'src/common/utils';
+import { KafkaClient } from 'src/common/kafka/kafka-client';
 
-
-export enum EVENTS {
-    LOGIN_USER = "LOGIN_USER"
+export enum AUTH_TOPICS {
+  CREATE_AUTH_TOKEN = 'CREATE_AUTH_TOKEN',
 }
 
 @Injectable()
-export class AuthClientService extends ClientKafka implements OnModuleInit, OnModuleDestroy {
-    constructor(configService: ConfigService) {
-        super({
-            client: {
-                clientId: configService.getOrThrow("KAFKA_CLIENT_ID"),
-                brokers: [configService.getOrThrow("KAFKA_BROKER")],
-            },
-            consumer: {
-                groupId: configService.getOrThrow("KAFKA_GROUP_ID")
-            },
-        });
-    }
+export class AuthClientService
+  extends KafkaClient
+  implements OnModuleInit, OnModuleDestroy
+{
+  constructor(configService: ConfigService) {
+    super(
+      {
+        client: {
+          clientId: configService.getOrThrow('KAFKA_CLIENT_ID'),
+          brokers: [configService.getOrThrow('KAFKA_BROKER')],
+        },
+        consumer: {
+          groupId: configService.getOrThrow('KAFKA_GROUP_ID'),
+        },
+      },
+      AUTH_TOPICS,
+    );
+  }
 
-    onModuleInit(): void {
-        Object.keys(EVENTS).forEach((event) => {
-            this.subscribeToResponseOf(EVENTS[event])
-        })
-        this.connect()
-    }
-
-    onModuleDestroy(): void {
-        this.close()
-    }
-
-    async sendMessage<T>(topic: string, payload: T) {
-        return new Promise((resolve) => {
-            this.send(topic, new CreatePayload(payload)).subscribe((resp) => {
-                resolve(resp)
-            })
-        })
-    }
-
+  createAuthToken(userId: string) {
+    return this.sendMessage(AUTH_TOPICS.CREATE_AUTH_TOKEN, { userId });
+  }
 }

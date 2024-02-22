@@ -1,17 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-import { USER_EVENT } from 'src/common/events/types';
-import { IResponse } from 'src/common/config';
-import { User } from './entities/user.entity';
+import { UserService } from 'src/user/user.service';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { TOPICS } from 'src/common/topics/types';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
-  @MessagePattern(USER_EVENT.CREATE_USER)
-  async create(createUserDto: CreateUserDto): Promise<IResponse<User>> {
+  @MessagePattern(TOPICS.CREATE_USER)
+  async create(createUserDto: CreateUserDto) {
     const resp = await this.userService.create(createUserDto);
     return resp;
   }

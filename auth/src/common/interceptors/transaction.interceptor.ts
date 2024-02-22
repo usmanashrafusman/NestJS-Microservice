@@ -6,7 +6,7 @@ import {
     Scope,
 } from '@nestjs/common';
 import { Observable, catchError, concatMap, finalize } from 'rxjs';
-import EntityManagerService from 'src/entity-manager/entity-manager.service';
+import EntityManagerService from 'src/database/entity-manager/entity-manager.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export default class TransactionInterceptor implements NestInterceptor {

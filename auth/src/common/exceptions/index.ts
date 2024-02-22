@@ -1,0 +1,33 @@
+export enum EXCEPTIONS {
+    NOT_FOUND = 'NOT_FOUND',
+    INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
+    UNKNOWN_ERROR = 'Unknown Error',
+    BAD_REQUEST = 'Bad Request',
+    UNAUTHORIZED = 'UNAUTHORIZED',
+    FORBIDDEN = 'FORBIDDEN',
+    NOT_ACCEPTABLE = 'NOT_ACCEPTABLE',
+    CONFLICT = 'CONFLICT',
+    GONE = 'GONE',
+    LENGTH_REQUIRED = 'LENGTH_REQUIRED',
+    PRECONDITION_FAILED = 'PRECONDITION_FAILED',
+    REQUEST_ENTITY_TOO_LARGE = 'REQUEST_ENTITY_TOO_LARGE',
+    REQUEST_URI_TOO_LONG = 'REQUEST_URI_TOO_LONG',
+    UNSUPPORTED_MEDIA_TYPE = 'UNSUPPORTED_MEDIA_TYPE',
+    REQUESTED_RANGE_NOT_SATISFIABLE = 'REQUESTED_RANGE_NOT_SATISFIABLE',
+    EXPECTATION_FAILED = 'EXPECTATION_FAILED',
+  }
+  
+  export enum ERROR_MESSAGES {
+    USER_ALREADY_EXIST = 'User with provided email already exists',
+    INTERNAL_SERVER_ERROR = 'Internal Server Error',
+    UNKNOWN_ERROR = 'Unknown Error',
+    BAD_REQUEST = 'Bad Request',
+    UNAUTHORIZED = 'Unauthorized',
+    FORBIDDEN = 'Forbidden',
+  }
+  
+  export interface ErrorType {
+    code: number;
+    message: string;
+  }
+  

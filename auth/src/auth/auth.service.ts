@@ -1,17 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSessionDto } from './dto/create-session.dto';
-import EntityManagerService from 'src/entity-manager/entity-manager.service';
+import EntityManagerService from 'src/database/entity-manager/entity-manager.service';
 import { Session } from './entities/session.entity';
-import { SuccessfulResponse } from 'src/common/http-response';
+import { TokenService } from 'src/token/token.service';
+import { SessionRepository } from './repositories/session.repository';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly entityManager: EntityManagerService) { }
+  constructor(
+    private readonly sessionRepository: SessionRepository,
+    private readonly tokenService: TokenService,
+  ) {}
 
-  async create(createSessionDto: CreateSessionDto) {
-    const session = new Session({ ...createSessionDto, token: "token-string", key: "key sting" })
-    const newSession = await this.entityManager.save(session)
-    return new SuccessfulResponse({ entity: newSession })
+  async createToken(createSessionDto: CreateSessionDto) {
+    const { token, secret } = this.tokenService.createToken(createSessionDto);
+    const session = new Session({ token, secret });
+    const newSession = await this.sessionRepository.save(session);
+    return { token: newSession.token };
   }
-
 }
